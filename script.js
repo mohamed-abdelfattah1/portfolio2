@@ -9,10 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('hero-photo').src = portfolioData.hero.photo;
     document.getElementById('hero-desc').textContent = portfolioData.hero.description;
 
+    // CV Download Buttons
+    const heroCvBtn = document.getElementById('hero-cv');
+    if (heroCvBtn) heroCvBtn.href = portfolioData.contact.cv;
+
+    const contactCvBtn = document.getElementById('contact-cv');
+    if (contactCvBtn) contactCvBtn.href = portfolioData.contact.cv;
+
     new Typed("#typed-text", {
         strings: portfolioData.hero.typingRoles,
-        typeSpeed: 50,
-        backSpeed: 30,
+        typeSpeed: 45,
+        backSpeed: 25,
         backDelay: 2000,
         loop: true,
         showCursor: true,
@@ -22,10 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. About Me
     document.getElementById('about-heading').textContent = portfolioData.about.heading;
     const aboutText = document.getElementById('about-text');
+    aboutText.innerHTML = '';
     portfolioData.about.paragraphs.forEach(p => {
         aboutText.innerHTML += `<p>${p}</p>`;
     });
+
     const aboutStats = document.getElementById('about-stats');
+    aboutStats.innerHTML = '';
     portfolioData.about.stats.forEach(stat => {
         aboutStats.innerHTML += `
             <div class="stat-card card">
@@ -35,25 +45,44 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     });
 
-    // 3. Education + Certifications
+    // 3. Education
     const eduGrid = document.getElementById('education-grid');
+    eduGrid.innerHTML = '';
     portfolioData.education.forEach(edu => {
         eduGrid.innerHTML += `
             <div class="card">
-                <h3>${edu.degree}</h3>
-                <p style="color: #00f3ff; margin: 5px 0;">${edu.institution} (${edu.period})</p>
+                <h3><i class="fa-solid fa-graduation-cap" style="color:#00f3ff; margin-right:8px;"></i>${edu.degree}</h3>
+                <p style="color: #00f3ff; margin: 5px 0; font-weight: 500;">${edu.institution} (${edu.period})</p>
                 <p>${edu.desc}</p>
             </div>
         `;
     });
 
-    const certGrid = document.getElementById('certifications-list');
-    portfolioData.certifications.forEach(cert => {
-        certGrid.innerHTML += `<li><i class="fa-solid fa-certificate"></i> ${cert}</li>`;
-    });
+    // 4. Certifications
+    const certGrid = document.getElementById('certifications-grid');
+    if (certGrid) {
+        certGrid.innerHTML = '';
+        portfolioData.certifications.forEach(cert => {
+            certGrid.innerHTML += `
+                <div class="card cert-card">
+                    <div class="cert-header">
+                        <i class="fa-solid fa-award card-icon"></i>
+                        <div>
+                            <h3>${cert.title}</h3>
+                            <span class="cert-issuer">${cert.issuer}</span>
+                        </div>
+                    </div>
+                    <a href="${cert.file}" target="_blank" class="btn btn-sm cert-btn">
+                        <i class="fa-solid fa-file-pdf"></i> View Certificate
+                    </a>
+                </div>
+            `;
+        });
+    }
 
-    // 4. Skills — مقسمة لتخصصات
+    // 5. Skills
     const skillsGrid = document.getElementById('skills-grid');
+    skillsGrid.innerHTML = '';
     portfolioData.skills.forEach(group => {
         const chips = group.items.map(item => `<span>${item}</span>`).join('');
         skillsGrid.innerHTML += `
@@ -64,23 +93,25 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     });
 
-    // 5. Experiences
+    // 6. Experiences
     const expGrid = document.getElementById('experiences-grid');
+    expGrid.innerHTML = '';
     portfolioData.experiences.forEach(exp => {
         expGrid.innerHTML += `
             <div class="card">
-                <h3>${exp.role}</h3>
+                <h3><i class="fa-solid fa-briefcase" style="color:#00f3ff; margin-right:8px;"></i>${exp.role}</h3>
                 <p style="color: #00f3ff; margin: 5px 0;">${exp.company} (${exp.period})</p>
                 <p>${exp.desc}</p>
             </div>
         `;
     });
 
-    // 6. Services
+    // 7. Services
     const servicesGrid = document.getElementById('services-grid');
+    servicesGrid.innerHTML = '';
     portfolioData.services.forEach(service => {
         servicesGrid.innerHTML += `
-            <div class="card">
+            <div class="card service-card">
                 <i class="fa-solid ${service.icon} card-icon"></i>
                 <h3>${service.title}</h3>
                 <p>${service.desc}</p>
@@ -88,21 +119,28 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     });
 
-    // 7. Projects
+    // 8. Projects
     const projectsGrid = document.getElementById('projects-grid');
+    projectsGrid.innerHTML = '';
     portfolioData.projects.forEach(project => {
         projectsGrid.innerHTML += `
-            <div class="card">
-                <span style="color: #00f3ff; font-size: 0.8rem; text-transform: uppercase;">[ ${project.category} ]</span>
-                <h3 style="margin-top: 8px;">${project.title}</h3>
-                <p style="margin-bottom: 15px;">${project.desc}</p>
-                <a href="${project.link}" target="_blank" class="btn btn-sm"><i class="fa-brands fa-github"></i> View Repository</a>
+            <div class="card project-card">
+                <div class="project-img-wrapper">
+                    <img src="${project.image}" alt="${project.title}" class="project-img" onerror="this.src='2.png'">
+                    <span class="project-category">[ ${project.category} ]</span>
+                </div>
+                <div class="project-details">
+                    <h3>${project.title}</h3>
+                    <p>${project.desc}</p>
+                    <a href="${project.link}" target="_blank" class="btn btn-sm"><i class="fa-brands fa-github"></i> Repository</a>
+                </div>
             </div>
         `;
     });
 
-    // 8. Testimonials
+    // 9. Testimonials
     const testGrid = document.getElementById('testimonials-grid');
+    testGrid.innerHTML = '';
     portfolioData.testimonials.forEach(test => {
         testGrid.innerHTML += `
             <div class="card testimonial-card">
@@ -113,22 +151,20 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     });
 
-    // 9. CTA
+    // 10. CTA
     document.getElementById('cta-heading').textContent = portfolioData.cta.heading;
     document.getElementById('cta-heading').setAttribute('data-text', portfolioData.cta.heading);
     document.getElementById('cta-subtext').textContent = portfolioData.cta.subtext;
     document.getElementById('cta-btn').textContent = portfolioData.cta.buttonText;
     document.getElementById('cta-btn').href = "#contact";
 
-    // 10. Contact Info
+    // 11. Contact Links
     document.getElementById('contact-email').href = `mailto:${portfolioData.contact.email}`;
     document.getElementById('contact-whatsapp').href = portfolioData.contact.whatsapp;
     document.getElementById('contact-linkedin').href = portfolioData.contact.linkedin;
     document.getElementById('contact-github').href = portfolioData.contact.github;
 
-    // ---- UI Enhancements ----
-
-    // قائمة الموبايل
+    // Mobile Navbar Toggle
     const navToggle = document.getElementById('nav-toggle');
     const navLinks = document.getElementById('nav-links');
     navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
@@ -136,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         a.addEventListener('click', () => navLinks.classList.remove('open'))
     );
 
-    // تظليل اللينك النشط أثناء السكرول
+    // Active Link Scroll Highlight
     const sections = document.querySelectorAll('section[id]');
     const navAnchors = document.querySelectorAll('#nav-links a');
     window.addEventListener('scroll', () => {
@@ -149,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { passive: true });
 
-    // أنيميشن ظهور العناصر عند السكرول
+    // Scroll Reveal Animation
     const revealObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -158,13 +194,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.card, .topology-box').forEach(el => {
+
+    document.querySelectorAll('.card').forEach(el => {
         el.classList.add('reveal');
         revealObserver.observe(el);
     });
 });
 
-// Matrix Rain Animation
+// Matrix Canvas Rain Effect
 const canvas = document.getElementById('matrix-canvas');
 const ctx = canvas.getContext('2d');
 
